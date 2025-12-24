@@ -23,7 +23,7 @@ The backend provides:
 ## 🛠 Tech Stack
 
 - **Language:** TypeScript
-- **Framework:** NestJS
+- **Framework:** Expressjs
 - **Database:** PostgreSQL
 - **ORM:** TypeORM / Prisma
 - **Authentication:** JWT + OTP
