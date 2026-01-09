@@ -6,7 +6,18 @@
   "scripts": {
     "dev": "nodemon --watch 'src/**/*.ts' --exec 'node --loader ts-node/esm' src/app.ts",
     "build": "tsc",
-    "start": "node dist/app.js"
+    "start": "node dist/app.js",
+    "prepare": "husky",
+    "lint": "eslint 'src/**/*.ts'",
+    "format": "prettier --write 'src/**/*.ts'",
+    "test": "NODE_OPTIONS=--experimental-vm-modules jest",
+    "test:coverage": "NODE_OPTIONS=--experimental-vm-modules jest --coverage"
+  },
+  "lint-staged": {
+    "*.{ts,js}": [
+      "eslint --fix",
+      "prettier --write"
+    ]
   },
   "dependencies": {
     "@prisma/client": "^7.2.0",
@@ -24,16 +35,29 @@
     "typeorm": "^0.3.28"
   },
   "devDependencies": {
+    "@commitlint/cli": "^20.3.0",
+    "@commitlint/config-conventional": "^20.3.0",
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6",
+    "@types/jest": "^30.0.0",
     "@types/node": "^25.0.3",
     "@types/pg": "^8.16.0",
-    "@typescript-eslint/parser": "^5.0.1",
-    "eslint": "^8.52.0",
+    "@typescript-eslint/eslint-plugin": "^8.51.0",
+    "@typescript-eslint/parser": "^8.51.0",
+    "cross-env": "^10.1.0",
+    "eslint": "^9.39.2",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-import": "^2.32.0",
+    "eslint-plugin-prettier": "^5.5.4",
+    "husky": "^9.1.7",
+    "jest": "^30.2.0",
+    "lint-staged": "^16.2.7",
     "nodemon": "^3.1.11",
-    "prettier": "^3.1.0",
+    "prettier": "^3.7.4",
     "prettier-eslint": "^16.1.2",
     "prisma": "^7.2.0",
+    "supertest": "^7.2.0",
+    "ts-jest": "^29.4.6",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.3"
   }
