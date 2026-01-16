@@ -1,9 +1,11 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
-
-import { AppDataSource } from "./database/data-source.js";
 import redisClient from "./cache/redisClient.js";
+import { AppDataSource } from "./database/data-source.js";
+
+import authRoutes from "./modules/auth/auth.routes.js";
+
 
 
 
@@ -16,6 +18,9 @@ const app = express();
 // Middleware
 app.use(cors());
 app.use(express.json());
+
+//Routes
+app.use("/api/auth", authRoutes);
 
 
 
