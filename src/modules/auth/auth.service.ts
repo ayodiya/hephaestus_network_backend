@@ -78,3 +78,20 @@ export async function loginUser(data: LoginDto) {
     };
   }
 }
+
+export async function passwordUserReset(data: {
+  email: string;
+  newPassword: string;
+}) {
+  const { email, newPassword } = data;
+
+  const user = await userRepo.findOne({ where: { email } });
+  if (!user) {
+    throw new Error("User with the given email does not exist");
+  }
+
+  // Further implementation for password reset (e.g., sending email) goes here
+  user.password = await hashPassword(newPassword);
+  await userRepo.save(user);
+  return { message: "Password reset successful" };
+}
