@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { registerUser } from "./auth.service.js";
+import { registerUser, loginUser } from "./auth.service.js";
 
 export async function register(req: Request, res: Response) {
   try {
@@ -14,3 +14,22 @@ export async function register(req: Request, res: Response) {
     });
   }
 }
+
+export async function login(req: Request, res: Response) {
+  // Login logic to be implemented
+
+  try {
+
+    const user = await loginUser({...req.body});
+    return res.status(200).json({
+      message: "User logged in successfully",
+      user,
+    });
+    
+  } catch (error:any) {
+      return res.status(400).json({
+      message: error.message,
+    });
+  }
+
+} 

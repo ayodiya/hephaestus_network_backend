@@ -1,7 +1,7 @@
 import { AppDataSource } from "../../database/data-source.js";
 import { User } from "../../database/entities/User.js";
-import { RegisterDto } from "./auth.dto.js";
-import { hashPassword } from "../../utils/password.js";
+import { RegisterDto, LoginDto } from "./auth.dto.js";
+import { comparePassword, hashPassword } from "../../utils/password.js";
 
 const userRepo = AppDataSource.getRepository(User);
 
@@ -11,10 +11,7 @@ export async function registerUser(data: RegisterDto) {
   }
 
   const existingUser = await userRepo.findOne({
-    where: [
-      { email: data.email },
-      { phone: data.phone },
-    ],
+    where: [{ email: data.email }, { phone: data.phone }],
   });
 
   if (existingUser) {
@@ -36,4 +33,48 @@ export async function registerUser(data: RegisterDto) {
     phone: user.phone,
     role: user.role,
   };
+}
+
+export async function loginUser(data: LoginDto) {
+  const { email, password } = data;
+  let userDetails: User | null;
+
+  const userEmailExists = await userRepo.findOne({
+    where: { email },
+  });
+
+  const userUsernameExists = await userRepo.findOne({
+    where: { username: email },
+  });
+
+  if (!userEmailExists && !userUsernameExists) {
+    throw new Error("Invalid email/username or password");
+  }
+
+  if (userUsernameExists) {
+    userDetails = userUsernameExists;
+  } else {
+    userDetails = userEmailExists;
+  }
+
+  if (!userDetails) {
+    throw new Error("Invalid email or password");
+  } else {
+    // Password verification logic to be implemented
+    const isPasswordValid = await comparePassword(
+      password,
+      userDetails.password,
+    );
+
+    if (!isPasswordValid) {
+      throw new Error("Invalid email or password");
+    }
+
+    return {
+      id: userDetails.id,
+      email: userDetails.email,
+      phone: userDetails.phone,
+      role: userDetails.role,
+    };
+  }
 }
