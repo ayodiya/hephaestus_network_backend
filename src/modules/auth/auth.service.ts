@@ -2,8 +2,12 @@ import { AppDataSource } from "../../database/data-source.js";
 import { User } from "../../database/entities/User.js";
 import { RegisterDto, LoginDto } from "./auth.dto.js";
 import { comparePassword, hashPassword } from "../../utils/password.js";
+import { generateToken } from "../../utils/token.js";
+import { getExpiryDate } from "../../utils/getExpiryDate.js";
+import { AuthToken, TokenType } from "../../database/entities/AuthToken.js";
 
 const userRepo = AppDataSource.getRepository(User);
+const tokenRepo = AppDataSource.getRepository(AuthToken);
 
 export async function registerUser(data: RegisterDto) {
   if (!data.email && !data.phone) {
@@ -35,9 +39,13 @@ export async function registerUser(data: RegisterDto) {
   };
 }
 
-export async function loginUser(data: LoginDto) {
+export async function loginUser(data: LoginDto, req: any) {
   const { email, password } = data;
   let userDetails: User | null;
+
+  //@ts-ignore
+  const { ipAddress, userAgent } = req.context;
+  const deviceId = req.headers["x-device-id"] as string | undefined;
 
   const userEmailExists = await userRepo.findOne({
     where: { email },
@@ -70,11 +78,29 @@ export async function loginUser(data: LoginDto) {
       throw new Error("Invalid email or password");
     }
 
+    const generatedToken = generateToken({
+      userId: userDetails.id,
+      role: userDetails.role,
+    });
+
+    const token = tokenRepo.create({
+      token: generatedToken,
+      tokenType: TokenType.ACCESS,
+      expiresAt: getExpiryDate(7),
+      user: userDetails,
+      ipAddress,
+      userAgent,
+      deviceId,
+    });
+
+    await tokenRepo.save(token);
+
     return {
       id: userDetails.id,
       email: userDetails.email,
       phone: userDetails.phone,
       role: userDetails.role,
+      token: generatedToken,
     };
   }
 }

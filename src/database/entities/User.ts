@@ -4,7 +4,11 @@ import {
   Column,
   CreateDateColumn,
   UpdateDateColumn,
+  OneToMany,
 } from "typeorm";
+
+import type { Relation } from "typeorm";
+import { AuthToken } from "./AuthToken.js";
 
 export enum UserRole {
   USER = "USER",
@@ -16,6 +20,12 @@ export enum UserRole {
 export class User {
   @PrimaryGeneratedColumn("uuid")
   id!: string;
+
+  @Column({ type: "varchar", nullable: true })
+  firstName!: string;
+
+  @Column({ type: "varchar", nullable: true })
+  lastName!: string;
 
   @Column({ unique: true, nullable: true })
   email?: string;
@@ -42,9 +52,15 @@ export class User {
   @Column({ default: false })
   isVerified!: boolean;
 
-  @CreateDateColumn()
+  /**
+   * ✅ SAFE inverse relation
+   */
+  @OneToMany("AuthToken", "user")
+  tokens!: Relation<AuthToken[]>;
+
+  @CreateDateColumn({ type: "timestamptz" })
   createdAt!: Date;
 
-  @UpdateDateColumn()
+  @UpdateDateColumn({ type: "timestamptz" })
   updatedAt!: Date;
 }
