@@ -16,13 +16,12 @@ export async function register(req: Request, res: Response) {
 }
 
 export async function login(req: Request, res: Response) {
-  // Login logic to be implemented
-
   try {
-    const user = await loginUser({ ...req.body });
+    const user = await loginUser({ ...req.body }, req);
+
     return res.status(200).json({
       message: "User logged in successfully",
-      user,
+      user: { ...user },
     });
   } catch (error: any) {
     return res.status(400).json({

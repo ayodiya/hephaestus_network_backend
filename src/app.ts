@@ -4,10 +4,8 @@ import dotenv from "dotenv";
 import redisClient from "./cache/redisClient.js";
 import { AppDataSource } from "./database/data-source.js";
 
+import requestContextMiddleware from "./middlewares/requestContext.middleware.js";
 import authRoutes from "./modules/auth/auth.routes.js";
-
-
-
 
 const PORT = process.env.PORT || 3000;
 
@@ -18,11 +16,10 @@ const app = express();
 // Middleware
 app.use(cors());
 app.use(express.json());
+app.use(requestContextMiddleware);
 
 //Routes
 app.use("/api/auth", authRoutes);
-
-
 
 /**
  * Health check
@@ -37,16 +34,13 @@ app.get("/health", async (_req, res) => {
   });
 });
 
-
 async function startServer() {
   try {
     await AppDataSource.initialize();
     console.log("✅ PostgreSQL connected (TypeORM)");
 
-     
     await redisClient.ping();
     console.log("Redis connected");
-  
 
     app.listen(PORT, () => {
       console.log(`🚀 Server running on port ${PORT}`);
@@ -58,4 +52,3 @@ async function startServer() {
 }
 
 startServer();
-
