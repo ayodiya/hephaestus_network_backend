@@ -7,14 +7,10 @@ import {
   OneToMany,
 } from "typeorm";
 
+import { UserRole } from "../../constants/roles.js";
+
 import type { Relation } from "typeorm";
 import { AuthToken } from "./AuthToken.js";
-
-export enum UserRole {
-  USER = "USER",
-  WORKER = "WORKER",
-  ADMIN = "ADMIN",
-}
 
 @Entity({ name: "users" })
 export class User {
