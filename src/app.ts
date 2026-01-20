@@ -4,7 +4,7 @@ import dotenv from "dotenv";
 import redisClient from "./cache/redisClient.js";
 import { AppDataSource } from "./database/data-source.js";
 
-import requestContextMiddleware from "./middlewares/requestContext.middleware.js";
+import requestContextMiddleware from "./middlewares/requestContext.js";
 import authRoutes from "./modules/auth/auth.routes.js";
 
 const PORT = process.env.PORT || 3000;
