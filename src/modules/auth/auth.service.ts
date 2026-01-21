@@ -10,23 +10,38 @@ const userRepo = AppDataSource.getRepository(User);
 const tokenRepo = AppDataSource.getRepository(AuthToken);
 
 export async function registerUser(data: RegisterDto) {
-  if (!data.email && !data.phone) {
+  const { email, phone, username, password, role } = data;
+
+  if (!email && !phone) {
     throw new Error("Email or phone number is required");
   }
 
-  const existingUser = await userRepo.findOne({
-    where: [{ email: data.email }, { phone: data.phone }],
-  });
+  if (phone) {
+    const existingUserPhone = await userRepo.findOne({
+      where: { phone },
+    });
 
-  if (existingUser) {
-    throw new Error("User already exists");
+    if (existingUserPhone) {
+      throw new Error("User with phone number already exists");
+    }
+  }
+
+  if (email) {
+    const existingUserEmail = await userRepo.findOne({
+      where: { email },
+    });
+
+    if (existingUserEmail) {
+      throw new Error("User with email already exists");
+    }
   }
 
   const user = userRepo.create({
-    email: data.email,
-    phone: data.phone,
-    username: data.username,
-    password: await hashPassword(data.password),
+    email,
+    phone,
+    username,
+    password: await hashPassword(password),
+    role,
   });
 
   await userRepo.save(user);

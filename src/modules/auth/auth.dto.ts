@@ -1,4 +1,12 @@
-import { IsEmail, IsOptional, IsMobilePhone, IsString, MinLength } from "class-validator";
+import {
+  IsEmail,
+  IsOptional,
+  IsMobilePhone,
+  IsString,
+  MinLength,
+  IsEnum,
+} from "class-validator";
+import { UserRole } from "../../constants/roles.js";
 
 export class RegisterDto {
   @IsOptional()
@@ -11,13 +19,15 @@ export class RegisterDto {
 
   @IsString()
   @MinLength(12)
-  username!: string;  
+  username!: string;
 
   @IsString()
   @MinLength(8)
   password!: string;
-}
 
+  @IsOptional()
+  role?: UserRole;
+}
 
 export class LoginDto {
   @IsOptional()

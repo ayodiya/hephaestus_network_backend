@@ -5,7 +5,9 @@ import redisClient from "./cache/redisClient.js";
 import { AppDataSource } from "./database/data-source.js";
 
 import requestContextMiddleware from "./middlewares/requestContext.js";
+
 import authRoutes from "./modules/auth/auth.routes.js";
+import workerRoutes from "./modules/workers/worker.routes.js";
 
 const PORT = process.env.PORT || 3000;
 
@@ -20,6 +22,7 @@ app.use(requestContextMiddleware);
 
 //Routes
 app.use("/api/auth", authRoutes);
+app.use("/api/workers", workerRoutes);
 
 /**
  * Health check
