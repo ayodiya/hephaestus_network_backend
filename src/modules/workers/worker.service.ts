@@ -83,3 +83,50 @@ export async function editOnboardWorker(
     worker: updatedWorker,
   };
 }
+
+export async function getWorkerByUserId(userId: string) {
+  const worker = await workerRepo.findOne({
+    where: { user: { id: userId } },
+    relations: ["user"],
+  });
+
+  if (!worker) {
+    throw new Error("Worker profile not found");
+  }
+
+  return worker;
+}
+
+export async function getWorkerById(workerId: string) {
+  const worker = await workerRepo.findOne({
+    where: { id: workerId },
+    relations: ["user"],
+  });
+
+  if (!worker) {
+    throw new Error("Worker profile not found");
+  }
+
+  return worker;
+}
+
+export async function getWorkerByUsername(username: string) {
+  const worker = await workerRepo.findOne({
+    where: { user: { username } },
+    relations: ["user"],
+  });
+
+  if (!worker) {
+    throw new Error("Worker profile not found");
+  }
+
+  return worker;
+}
+
+export async function listAllWorkers() {
+  const workers = await workerRepo.find({
+    relations: ["user"],
+  });
+
+  return workers;
+}
