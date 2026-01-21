@@ -8,6 +8,7 @@ import {
 } from "typeorm";
 
 import { UserRole } from "../../constants/roles.js";
+// import { Worker } from "./Worker.js";
 
 import type { Relation } from "typeorm";
 import { AuthToken } from "./AuthToken.js";
