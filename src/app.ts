@@ -8,6 +8,7 @@ import requestContextMiddleware from "./middlewares/requestContext.js";
 
 import authRoutes from "./modules/auth/auth.routes.js";
 import workerRoutes from "./modules/workers/worker.routes.js";
+import jobRoutes from "./modules/job/job.routes.js";
 
 const PORT = process.env.PORT || 3000;
 
@@ -23,6 +24,7 @@ app.use(requestContextMiddleware);
 //Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/workers", workerRoutes);
+app.use("/api/jobs", jobRoutes);
 
 /**
  * Health check

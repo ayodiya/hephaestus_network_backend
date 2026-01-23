@@ -36,6 +36,16 @@ export async function registerUser(data: RegisterDto) {
     }
   }
 
+  if (username) {
+    const existingUsername = await userRepo.findOne({
+      where: { username },
+    });
+
+    if (existingUsername) {
+      throw new Error("User with username already exists");
+    }
+  }
+
   const user = userRepo.create({
     email,
     phone,
