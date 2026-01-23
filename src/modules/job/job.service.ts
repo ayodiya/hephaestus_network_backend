@@ -6,7 +6,7 @@ import { AppDataSource } from "../../database/data-source.js";
 const jobRepo = AppDataSource.getRepository(Job);
 const userRepo = AppDataSource.getRepository(User);
 
-export async function createJob(userId: string, data: CreateJobDto) {
+export async function createJobService(userId: string, data: CreateJobDto) {
   const user = await userRepo.findOne({ where: { id: userId } });
 
   if (!user) {
@@ -32,7 +32,10 @@ export async function createJob(userId: string, data: CreateJobDto) {
   };
 }
 
-export async function editJob(jobId: string, data: Partial<CreateJobDto>) {
+export async function editJobService(
+  jobId: string,
+  data: Partial<CreateJobDto>,
+) {
   const job = await jobRepo.findOne({ where: { id: jobId } });
 
   if (!job) {
@@ -49,7 +52,7 @@ export async function editJob(jobId: string, data: Partial<CreateJobDto>) {
   };
 }
 
-export async function deleteJob(jobId: string) {
+export async function deleteJobService(jobId: string) {
   const job = await jobRepo.findOne({ where: { id: jobId } });
 
   if (!job) {
@@ -63,7 +66,7 @@ export async function deleteJob(jobId: string) {
   };
 }
 
-export async function getJobById(jobId: string) {
+export async function getJobByIdService(jobId: string) {
   const job = await jobRepo.findOne({ where: { id: jobId } });
 
   if (!job) {
@@ -73,7 +76,7 @@ export async function getJobById(jobId: string) {
   return job;
 }
 
-export async function getAllJobs() {
+export async function getAllJobsService() {
   const jobs = await jobRepo.find();
   return jobs;
 }

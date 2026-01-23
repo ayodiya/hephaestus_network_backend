@@ -9,7 +9,7 @@ import { AuthToken, TokenType } from "../../database/entities/AuthToken.js";
 const userRepo = AppDataSource.getRepository(User);
 const tokenRepo = AppDataSource.getRepository(AuthToken);
 
-export async function registerUser(data: RegisterDto) {
+export async function registerUserService(data: RegisterDto) {
   const { email, phone, username, password, role } = data;
 
   if (!email && !phone) {
@@ -64,7 +64,7 @@ export async function registerUser(data: RegisterDto) {
   };
 }
 
-export async function loginUser(data: LoginDto, req: any) {
+export async function loginUserService(data: LoginDto, req: any) {
   const { email, password } = data;
   let userDetails: User | null;
 
@@ -130,7 +130,7 @@ export async function loginUser(data: LoginDto, req: any) {
   }
 }
 
-export async function passwordUserReset(data: {
+export async function passwordUserResetService(data: {
   email: string;
   newPassword: string;
 }) {

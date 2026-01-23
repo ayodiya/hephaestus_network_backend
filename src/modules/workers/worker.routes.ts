@@ -4,12 +4,12 @@ import { authorizeRoles } from "../../middlewares/role.js";
 
 import { UserRole } from "../../constants/roles.js";
 import {
-  createWorkerProfile,
-  editWorkerProfile,
-  getAllWorkers,
-  getWorkerByProfileUsername,
-  getWorkerProfileById,
-  getWorkerProfileByUserId,
+  createWorkerProfileController,
+  editWorkerProfileController,
+  getAllWorkersController,
+  getWorkerByProfileUsernameController,
+  getWorkerProfileByIdController,
+  getWorkerProfileByUserIdController,
 } from "./worker.controller.js";
 
 const router = Router();
@@ -18,36 +18,36 @@ router.post(
   "/onboard",
   authenticate,
   authorizeRoles(UserRole.WORKER),
-  createWorkerProfile,
+  createWorkerProfileController,
 );
 
 router.put(
   "/edit-onboard",
   authenticate,
   authorizeRoles(UserRole.WORKER),
-  editWorkerProfile,
+  editWorkerProfileController,
 );
 
 router.get(
   "/:userId",
   authenticate,
   authorizeRoles(UserRole.ADMIN, UserRole.WORKER, UserRole.USER),
-  getWorkerProfileByUserId,
+  getWorkerProfileByUserIdController,
 );
 router.get(
   "/profile/:id",
   authenticate,
   authorizeRoles(UserRole.ADMIN, UserRole.WORKER, UserRole.USER),
-  getWorkerProfileById,
+  getWorkerProfileByIdController,
 );
 
 router.get(
   "/username/:username",
   authenticate,
   authorizeRoles(UserRole.ADMIN, UserRole.WORKER, UserRole.USER),
-  getWorkerByProfileUsername,
+  getWorkerByProfileUsernameController,
 );
 
-router.get("/all", authenticate, getAllWorkers);
+router.get("/all", authenticate, getAllWorkersController);
 
 export default router;

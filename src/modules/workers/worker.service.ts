@@ -6,7 +6,10 @@ import { CreateWorkerDto } from "./create-worker.dto.js";
 const workerRepo = AppDataSource.getRepository(Worker);
 const userRepo = AppDataSource.getRepository(User);
 
-export async function onboardWorker(userId: string, data: CreateWorkerDto) {
+export async function onboardWorkerService(
+  userId: string,
+  data: CreateWorkerDto,
+) {
   const user = await userRepo.findOne({
     where: { id: userId },
   });
@@ -46,7 +49,7 @@ export async function onboardWorker(userId: string, data: CreateWorkerDto) {
   };
 }
 
-export async function editOnboardWorker(
+export async function editOnboardWorkerService(
   userId: string,
   data: Partial<CreateWorkerDto>,
 ) {
@@ -84,7 +87,7 @@ export async function editOnboardWorker(
   };
 }
 
-export async function getWorkerByUserId(userId: string) {
+export async function getWorkerByUserIdService(userId: string) {
   const worker = await workerRepo.findOne({
     where: { user: { id: userId } },
     relations: ["user"],
@@ -97,7 +100,7 @@ export async function getWorkerByUserId(userId: string) {
   return worker;
 }
 
-export async function getWorkerById(workerId: string) {
+export async function getWorkerByIdService(workerId: string) {
   const worker = await workerRepo.findOne({
     where: { id: workerId },
     relations: ["user"],
@@ -110,7 +113,7 @@ export async function getWorkerById(workerId: string) {
   return worker;
 }
 
-export async function getWorkerByUsername(username: string) {
+export async function getWorkerByUsernameService(username: string) {
   const worker = await workerRepo.findOne({
     where: { user: { username } },
     relations: ["user"],
@@ -123,7 +126,7 @@ export async function getWorkerByUsername(username: string) {
   return worker;
 }
 
-export async function listAllWorkers() {
+export async function listAllWorkersService() {
   const workers = await workerRepo.find({
     relations: ["user"],
   });

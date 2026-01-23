@@ -1,15 +1,15 @@
 import { Request, Response } from "express";
 import {
-  createJob,
-  deleteJob,
-  editJob,
-  getAllJobs,
-  getJobById,
+  createJobService,
+  deleteJobService,
+  editJobService,
+  getAllJobsService,
+  getJobByIdService,
 } from "./job.service.js";
 
 export async function createJobController(req: Request, res: Response) {
   try {
-    const result = await createJob(req.user!.userId, req.body);
+    const result = await createJobService(req.user!.userId, req.body);
     return res.status(201).json({
       status: "success",
       data: result,
@@ -24,7 +24,7 @@ export async function createJobController(req: Request, res: Response) {
 
 export async function editJobController(req: Request, res: Response) {
   try {
-    const result = await editJob(req.params.jobId, req.body);
+    const result = await editJobService(req.params.jobId, req.body);
     return res.status(200).json({
       status: "success",
       data: result,
@@ -39,7 +39,7 @@ export async function editJobController(req: Request, res: Response) {
 
 export async function deleteJobController(req: Request, res: Response) {
   try {
-    const result = await deleteJob(req.params.jobId);
+    const result = await deleteJobService(req.params.jobId);
     return res.status(200).json({
       status: "success",
       data: result,
@@ -54,7 +54,7 @@ export async function deleteJobController(req: Request, res: Response) {
 
 export async function getJobByIdController(req: Request, res: Response) {
   try {
-    const job = await getJobById(req.params.jobId);
+    const job = await getJobByIdService(req.params.jobId);
     return res.status(200).json({
       status: "success",
       data: job,
@@ -69,7 +69,7 @@ export async function getJobByIdController(req: Request, res: Response) {
 
 export async function getAllJobsController(req: Request, res: Response) {
   try {
-    const jobs = await getAllJobs();
+    const jobs = await getAllJobsService();
     return res.status(200).json({
       status: "success",
       data: jobs,

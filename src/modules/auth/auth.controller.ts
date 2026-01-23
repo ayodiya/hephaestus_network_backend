@@ -1,9 +1,13 @@
 import { Request, Response } from "express";
-import { registerUser, loginUser, passwordUserReset } from "./auth.service.js";
+import {
+  registerUserService,
+  loginUserService,
+  passwordUserResetService,
+} from "./auth.service.js";
 
-export async function register(req: Request, res: Response) {
+export async function registerController(req: Request, res: Response) {
   try {
-    const user = await registerUser({ ...req.body, isVerified: true });
+    const user = await registerUserService({ ...req.body, isVerified: true });
     return res.status(201).json({
       message: "User registered successfully",
       user,
@@ -15,9 +19,9 @@ export async function register(req: Request, res: Response) {
   }
 }
 
-export async function login(req: Request, res: Response) {
+export async function loginController(req: Request, res: Response) {
   try {
-    const user = await loginUser({ ...req.body }, req);
+    const user = await loginUserService({ ...req.body }, req);
 
     return res.status(200).json({
       message: "User logged in successfully",
@@ -30,9 +34,9 @@ export async function login(req: Request, res: Response) {
   }
 }
 
-export async function passwordReset(req: Request, res: Response) {
+export async function passwordResetController(req: Request, res: Response) {
   try {
-    const user = await passwordUserReset({ ...req.body });
+    const user = await passwordUserResetService({ ...req.body });
     return res.status(200).json({
       message: "User logged in successfully",
       user,

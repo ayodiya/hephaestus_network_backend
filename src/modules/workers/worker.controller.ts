@@ -1,17 +1,20 @@
 import { Request, Response } from "express";
 import {
-  onboardWorker,
-  editOnboardWorker,
-  getWorkerById,
-  getWorkerByUserId,
-  listAllWorkers,
-  getWorkerByUsername,
+  onboardWorkerService,
+  editOnboardWorkerService,
+  getWorkerByIdService,
+  getWorkerByUserIdService,
+  listAllWorkersService,
+  getWorkerByUsernameService,
 } from "./worker.service.js";
 import { plainToInstance } from "class-transformer";
 import { validate } from "class-validator";
 import { CreateWorkerDto } from "./create-worker.dto.js";
 
-export async function createWorkerProfile(req: Request, res: Response) {
+export async function createWorkerProfileController(
+  req: Request,
+  res: Response,
+) {
   const dto = plainToInstance(CreateWorkerDto, req.body);
   const errors = await validate(dto);
 
@@ -23,7 +26,7 @@ export async function createWorkerProfile(req: Request, res: Response) {
   }
 
   try {
-    const result = await onboardWorker(req.user!.userId, dto);
+    const result = await onboardWorkerService(req.user!.userId, dto);
 
     return res.status(201).json({
       status: "success",
@@ -37,9 +40,9 @@ export async function createWorkerProfile(req: Request, res: Response) {
   }
 }
 
-export async function editWorkerProfile(req: Request, res: Response) {
+export async function editWorkerProfileController(req: Request, res: Response) {
   try {
-    const result = await editOnboardWorker(req.user!.userId, req.body);
+    const result = await editOnboardWorkerService(req.user!.userId, req.body);
 
     return res.status(200).json({
       status: "success",
@@ -53,9 +56,12 @@ export async function editWorkerProfile(req: Request, res: Response) {
   }
 }
 
-export async function getWorkerProfileById(req: Request, res: Response) {
+export async function getWorkerProfileByIdController(
+  req: Request,
+  res: Response,
+) {
   try {
-    const worker = await getWorkerById(req.params.id);
+    const worker = await getWorkerByIdService(req.params.id);
 
     return res.status(200).json({
       status: "success",
@@ -69,9 +75,12 @@ export async function getWorkerProfileById(req: Request, res: Response) {
   }
 }
 
-export async function getWorkerProfileByUserId(req: Request, res: Response) {
+export async function getWorkerProfileByUserIdController(
+  req: Request,
+  res: Response,
+) {
   try {
-    const worker = await getWorkerByUserId(req.user!.userId);
+    const worker = await getWorkerByUserIdService(req.user!.userId);
 
     return res.status(200).json({
       status: "success",
@@ -85,9 +94,12 @@ export async function getWorkerProfileByUserId(req: Request, res: Response) {
   }
 }
 
-export async function getWorkerByProfileUsername(req: Request, res: Response) {
+export async function getWorkerByProfileUsernameController(
+  req: Request,
+  res: Response,
+) {
   try {
-    const worker = await getWorkerByUsername(req.params.username);
+    const worker = await getWorkerByUsernameService(req.params.username);
 
     return res.status(200).json({
       status: "success",
@@ -101,9 +113,9 @@ export async function getWorkerByProfileUsername(req: Request, res: Response) {
   }
 }
 
-export async function getAllWorkers(req: Request, res: Response) {
+export async function getAllWorkersController(req: Request, res: Response) {
   try {
-    const users = await listAllWorkers();
+    const users = await listAllWorkersService();
     // Implementation to get all workers
     return res.status(200).json({
       status: "success",
