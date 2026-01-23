@@ -7,11 +7,10 @@ import {
   OneToMany,
 } from "typeorm";
 
-import { UserRole } from "../../constants/roles.js";
-// import { Worker } from "./Worker.js";
-
 import type { Relation } from "typeorm";
+import { UserRole } from "../../constants/roles.js";
 import { AuthToken } from "./AuthToken.js";
+import { Job } from "./Job.js";
 
 @Entity({ name: "users" })
 export class User {
@@ -19,10 +18,10 @@ export class User {
   id!: string;
 
   @Column({ type: "varchar", nullable: true })
-  firstName!: string;
+  firstName?: string;
 
   @Column({ type: "varchar", nullable: true })
-  lastName!: string;
+  lastName?: string;
 
   @Column({ unique: true, nullable: true })
   email?: string;
@@ -30,7 +29,7 @@ export class User {
   @Column({ unique: true })
   username!: string;
 
-  @Column({ unique: false, nullable: true })
+  @Column({ nullable: true })
   profileImage?: string;
 
   @Column({ unique: true, nullable: true })
@@ -49,11 +48,19 @@ export class User {
   @Column({ default: false })
   isVerified!: boolean;
 
-  /**
-   * ✅ SAFE inverse relation
-   */
+  /* =====================
+     Relations
+  ====================== */
+
   @OneToMany("AuthToken", "user")
   tokens!: Relation<AuthToken[]>;
+
+  @OneToMany(() => Job, (job) => job.postedBy)
+  jobs!: Relation<Job[]>;
+
+  /* =====================
+     Audit
+  ====================== */
 
   @CreateDateColumn({ type: "timestamptz" })
   createdAt!: Date;
